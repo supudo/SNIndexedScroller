@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <script>
+            function isSectionVisible(elem, sy, sh) {
+                var t = elem.offset().top;
+                return (t >= sy && t <= (sy + sh));
+            }
+            </script>
+    </head>
+    <body>
+        <div id="textContent">
+            {CONTENT}
+        </div>
+    </body>
+</html>

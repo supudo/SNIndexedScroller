@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[ViewController viewDidLoad]:ViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[UIFont fontWithName:@&quot;System Bold&quot; size:16]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[SNScrollView showSection:withY:]:SNScrollView.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
