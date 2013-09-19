@@ -1,14 +1,14 @@
 Custom indexed scroller for large texts.
 
-## Usage
+# Usage
 
-#Import SNScrollView.h
+###Import SNScrollView.h
 
 ```objectivec
 #import "SNScrollView.h"
  ```
  
-#Initialize and add to current view
+###Initialize and add to current view
 
 ```objectivec
 SNScrollView *sv = [[SNScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
