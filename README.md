@@ -20,3 +20,16 @@ SNScrollView *sv = [[SNScrollView alloc] initWithFrame:CGRectMake(0, 0, self.vie
 [sv showContentWithFile:@"content.txt"];
 [self.view addSubview:sv];
 ```
+
+content.txt is the file containing the HTML to be displayed. "section" is the ID tag marking each section in the document.
+So for example a section could be :
+
+```html
+<strong id="section1">Lorem ipsum</strong>
+```
+
+or
+
+```html
+<span id="section2">Lorem ipsum</span>
+```
