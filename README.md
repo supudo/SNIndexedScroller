@@ -1,4 +1,5 @@
-Custom indexed scroller for large texts.
+HTML content display, with custom scroller, showing specific sections throughout the document as markers in the scroll. On position it displays the currently scrolled section.
+Section titles are parsed automatically from the document.
 
 # Usage
 
