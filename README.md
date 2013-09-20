@@ -39,3 +39,6 @@ or
 ```html
 <span id="section2">Lorem ipsum</span>
 ```
+
+
+Use, change, rewrite, drop me a line ... whatever fits your needs :)
