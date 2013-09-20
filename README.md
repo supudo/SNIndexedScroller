@@ -2,11 +2,17 @@ Custom indexed scroller for large texts.
 
 # Usage
 
+###Add files
+
+Add all files from the "SNIndexedScroller" into your project.
+
 ###Import SNScrollView.h
 
 ```objectivec
 #import "SNScrollView.h"
  ```
+
+Import the scroll header file into the file you're planing to use it in.
  
 ###Initialize and add to current view
 

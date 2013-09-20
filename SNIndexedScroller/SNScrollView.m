@@ -201,6 +201,10 @@
 
 #pragma mark - Scroller initialization
 
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.scrollingItem touchesMoved:touches withEvent:event];
+}
+
 - (void)initScroll {
     self.scrollingItem = [[SNScrollableItem alloc] init];
     [self.scrollingItem setFrame:CGRectMake(1, 1, self.viewScroller.frame.size.width - 2, self.scrollbarWidth - 2)];
@@ -227,7 +231,6 @@
         [v.layer setCornerRadius:5];
         [v.layer setMasksToBounds:YES];
         [self.viewScroller addSubview:v];
-        [self.viewScroller bringSubviewToFront:v];
         UITapGestureRecognizer *stap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sectionTapped:)];
         [stap setNumberOfTapsRequired:1];
         [stap setNumberOfTouchesRequired:1];

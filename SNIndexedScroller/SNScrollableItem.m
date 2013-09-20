@@ -32,6 +32,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *aTouch = [touches anyObject];
     CGPoint location = [aTouch locationInView:self.superview];
+    
     [UIView beginAnimations:@"Dragging Scoller" context:nil];
 
     float scrollHeight = [self superview].frame.size.height - self.frame.size.height;
@@ -43,6 +44,7 @@
     self.frame = CGRectMake(1, y, self.frame.size.width, self.frame.size.height);
 
     [UIView commitAnimations];
+
     if (self.delegate != nil) {
         if (previousPositionY < y && [self.delegate respondsToSelector:@selector(draggedDown:diff:)])
             [self.delegate draggedDown:self diff:y];
