@@ -14,5 +14,6 @@
 @property (nonatomic, readwrite, retain) UIColor *foregroundColor;
 @property (nonatomic, readwrite) UIEdgeInsets labelEdgeInsets;
 @property (nonatomic, readonly) UILabel *lblText;
+@property float viewWidth;
 
 @end

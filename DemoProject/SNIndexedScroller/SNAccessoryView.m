@@ -18,6 +18,7 @@
 @synthesize foregroundColor = _foregroundColor;
 @synthesize labelEdgeInsets = _labelEdgeInsets;
 @synthesize lblText;
+@synthesize viewWidth;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -25,7 +26,7 @@
 
         arrowWidth = 20;
         _foregroundColor = [UIColor clearColor];
-        _labelEdgeInsets = UIEdgeInsetsMake(4, 6, 4, 6);
+        _labelEdgeInsets = UIEdgeInsetsMake(1, 6, 1, 6);
         
         lblText = [[UILabel alloc] initWithFrame:CGRectZero];
         [lblText setBackgroundColor:_foregroundColor];
@@ -37,6 +38,8 @@
         [self addSubview:lblText];
         
         [self setBackgroundColor:self.foregroundColor];
+        [self.layer setCornerRadius:8];
+        [self.layer setMasksToBounds:YES];
     }
     return self;
 }
@@ -61,8 +64,10 @@
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
     CGPathAddLineToPoint(path, NULL, bounds.size.width - arrowWidth, 0);
+
     CGPathAddLineToPoint(path, NULL, bounds.size.width, bounds.size.height / 2 - 1);
     CGPathAddLineToPoint(path, NULL, bounds.size.width - arrowWidth, bounds.size.height);
+
     CGPathAddLineToPoint(path, NULL, 0, bounds.size.height);
     CGPathCloseSubpath(path);
     

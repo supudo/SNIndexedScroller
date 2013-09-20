@@ -23,7 +23,6 @@
 		8A3909CF17E8923C0041553C /* SNScrollableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3909CE17E8923B0041553C /* SNScrollableItem.m */; };
 		8A3909D417E8A8120041553C /* SNAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3909D317E8A8120041553C /* SNAccessoryView.m */; };
 		8A520A2C17E9B6D70049B895 /* SNContentTemplate.html in Resources */ = {isa = PBXBuildFile; fileRef = 8A520A2B17E9B6D70049B895 /* SNContentTemplate.html */; };
-		8A568DB217EADEFB005B8463 /* jquery-1.10.2.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 8A568DB117EADEFB005B8463 /* jquery-1.10.2.min.js */; };
 		8A873E6117E9DFC800C4D6AE /* SNScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A873E6017E9DFC800C4D6AE /* SNScrollView.m */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +50,6 @@
 		8A3909D217E8A8120041553C /* SNAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNAccessoryView.h; sourceTree = "<group>"; };
 		8A3909D317E8A8120041553C /* SNAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNAccessoryView.m; sourceTree = "<group>"; };
 		8A520A2B17E9B6D70049B895 /* SNContentTemplate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SNContentTemplate.html; sourceTree = "<group>"; };
-		8A568DB117EADEFB005B8463 /* jquery-1.10.2.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.10.2.min.js"; sourceTree = "<group>"; };
 		8A873E5F17E9DFC800C4D6AE /* SNScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNScrollView.h; sourceTree = "<group>"; };
 		8A873E6017E9DFC800C4D6AE /* SNScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,7 +71,6 @@
 		8A32D64917E9FAE100ADDC4B /* SNIndexedScroller */ = {
 			isa = PBXGroup;
 			children = (
-				8A568DB117EADEFB005B8463 /* jquery-1.10.2.min.js */,
 				8A520A2B17E9B6D70049B895 /* SNContentTemplate.html */,
 				8A3909CD17E8923B0041553C /* SNScrollableItem.h */,
 				8A3909CE17E8923B0041553C /* SNScrollableItem.m */,
@@ -201,7 +198,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A568DB217EADEFB005B8463 /* jquery-1.10.2.min.js in Resources */,
 				8A3909AA17E86F1D0041553C /* InfoPlist.strings in Resources */,
 				8A3909B217E86F1D0041553C /* Default.png in Resources */,
 				8A3909B417E86F1D0041553C /* Default@2x.png in Resources */,
@@ -323,6 +319,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SNIndexedScroller/SNIndexedScroller-Prefix.pch";
 				INFOPLIST_FILE = "SNIndexedScroller/SNIndexedScroller-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -334,6 +331,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SNIndexedScroller/SNIndexedScroller-Prefix.pch";
 				INFOPLIST_FILE = "SNIndexedScroller/SNIndexedScroller-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

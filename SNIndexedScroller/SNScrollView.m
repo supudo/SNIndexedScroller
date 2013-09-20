@@ -13,7 +13,7 @@
 @interface SNScrollView ()
 @property (nonatomic, strong) UIScrollView *viewContent;
 @property (nonatomic, strong) UIWebView *viewWeb;
-@property (nonatomic, strong) UIView *viewScroller;
+@property (nonatomic, strong) UIView *viewScroller, *viewScrollerBackground;
 
 @property float contentHeight, scrollbarWidth;
 @property CGFloat firstX, firstY;
@@ -22,7 +22,8 @@
 @property (nonatomic, strong) SNAccessoryView *scrollingAccessoryView;
 @property (nonatomic, strong) NSMutableArray *listSections, *listSectionIDs;
 @property (nonatomic, strong) NSString *currentContent, *sectionTitleTag;
-@property (nonatomic, strong) UIColor *colorDefaultScroller, *colorDefaultSectionDot, *colorDefaultAccessoryView, *colorDefaultAccessoryViewText;
+@property (nonatomic, strong) UIColor *colorScroller, *colorSectionDot, *colorAccessoryView, *colorAccessoryViewText;
+@property float alphaScroller, alphaSectionDot, alphaAccessoryView;
 @property (nonatomic, strong) UIFont *fontSectionTitle;
 @end
 
@@ -30,12 +31,12 @@
 
 @synthesize viewContent, viewWeb, viewScroller, contentHeight, firstX, firstY, scrollingItem;
 @synthesize scrollingAccessoryView, scrollbarWidth, sectionTitleTag, fontSectionTitle;
-@synthesize colorDefaultScroller, colorDefaultSectionDot, colorDefaultAccessoryView, colorDefaultAccessoryViewText;
+@synthesize colorScroller, colorSectionDot, colorAccessoryView, colorAccessoryViewText;
 
 #pragma mark - Public methods
 
 - (void)showContentWithFile:(NSString *)filename {
-    NSString *pathTemplate = [[NSBundle mainBundle] pathForResource:@"template" ofType:@"html"];
+    NSString *pathTemplate = [[NSBundle mainBundle] pathForResource:@"SNContentTemplate" ofType:@"html"];
     NSString *textTemplate = [NSString stringWithContentsOfFile:pathTemplate encoding:NSUTF8StringEncoding error:nil];
     NSString *pathContent = [[NSBundle mainBundle] pathForResource:[filename stringByDeletingPathExtension] ofType:[filename pathExtension]];
     NSString *textContent = [NSString stringWithContentsOfFile:pathContent encoding:NSUTF8StringEncoding error:nil];
@@ -53,22 +54,27 @@
 }
 
 - (void)setColorScroller:(UIColor *)color withAlpha:(float)alpha {
-    self.colorDefaultScroller = [self colorInjectAlpha:color withAlpha:alpha];
-    if (self.viewScroller != nil)
-        [self.viewScroller setBackgroundColor:color];
+    self.colorScroller = color;
+    self.alphaScroller = alpha;
+    if (self.viewScrollerBackground != nil) {
+        [self.viewScrollerBackground setBackgroundColor:color];
+        [self.viewScrollerBackground setAlpha:self.alphaScroller];
+    }
 }
 
 - (void)setColorSectionDot:(UIColor *)color withAlpha:(float)alpha {
-    self.colorDefaultSectionDot = [self colorInjectAlpha:color withAlpha:alpha];
+    self.colorSectionDot = color;
+    self.alphaSectionDot = alpha;
 }
 
 - (void)setColorAccessoryView:(UIColor *)color withAlpha:(float)alpha {
-    self.colorDefaultAccessoryView = [self colorInjectAlpha:color withAlpha:alpha];
+    self.colorAccessoryView = color;
+    self.alphaAccessoryView = alpha;
 }
 
 - (void)setFontAccessoryView:(UIFont *)font withColor:(UIColor *)color {
     self.fontSectionTitle = font;
-    self.colorDefaultAccessoryViewText = color;
+    self.colorAccessoryViewText = color;
 }
 
 #pragma mark - Initialization
@@ -83,11 +89,14 @@
         self.sectionCount = 0;
         
         // Default colors & fonts
-        self.colorDefaultScroller = [UIColor orangeColor];
-        self.colorDefaultSectionDot = [UIColor whiteColor];
-        self.colorDefaultAccessoryView = [UIColor colorWithWhite:0.2f alpha:.8f];
+        self.colorScroller = [UIColor orangeColor];
+        self.colorSectionDot = [UIColor whiteColor];
+        self.colorAccessoryView = [UIColor colorWithWhite:0.2f alpha:.8f];
         self.fontSectionTitle = [UIFont fontWithName:@"System" size:14];
-        self.colorDefaultAccessoryViewText = [UIColor whiteColor];
+        self.colorAccessoryViewText = [UIColor whiteColor];
+        //self.alphaScroller = 0.2f;
+        self.alphaSectionDot = 1.0f;
+        self.alphaAccessoryView = 1.0f;
 
         // Scroll view for the UIWebView content
         self.viewContent = [[UIScrollView alloc] init];
@@ -117,9 +126,17 @@
         self.viewScroller = [[UIView alloc] init];
         [self.viewScroller setFrame:CGRectMake(frame.size.width - self.scrollbarWidth, frame.origin.y, self.scrollbarWidth, frame.size.height)];
         [self.viewScroller setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-        [self.viewScroller setBackgroundColor:self.colorDefaultScroller];
+        [self.viewScroller setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.viewScroller];
-        
+
+        // The scrollbar background view
+        self.viewScrollerBackground = [[UIView alloc] init];
+        [self.viewScrollerBackground setFrame:self.viewScroller.frame];
+        [self.viewScrollerBackground setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+        [self.viewScrollerBackground setBackgroundColor:self.colorScroller];
+        [self.viewScrollerBackground setAlpha:self.alphaScroller];
+        [self addSubview:self.viewScrollerBackground];
+
         self.listSections = [[NSMutableArray alloc] init];
         self.listSectionIDs = [[NSMutableArray alloc] init];
     }
@@ -144,11 +161,7 @@
             break;
     }
     while (1);
-
-    [self loadContent];
-}
-
-- (void)loadContent {
+    
     [self.viewWeb loadHTMLString:self.currentContent baseURL:nil];
 }
 
@@ -162,33 +175,26 @@
     self.contentHeight = self.viewWeb.frame.origin.y + h + 70;
     [self.viewContent setContentSize:CGSizeMake(self.viewWeb.frame.size.width, self.contentHeight)];
     
-    // Inject jQuery
-    NSString *jsFile = @"jquery-ui-1.10.3.custom.min.js";
-    NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:[jsFile stringByDeletingPathExtension] ofType:[jsFile pathExtension]];
-    NSURL *jsURL = [NSURL fileURLWithPath:jsFilePath];
-    NSString *javascriptCode = [NSString stringWithContentsOfFile:jsURL.path encoding:NSUTF8StringEncoding error:nil];
-    [self.viewWeb stringByEvaluatingJavaScriptFromString:javascriptCode];
-    
     [self initScroll];
 }
 
 #pragma mark - Javascript function calls
 
 - (CGRect)javascriptPositionOfElementWithId:(NSString *)elementID {
-    NSString *js = @"function f(){ var r = document.getElementById('%@').getBoundingClientRect(); return '{{'+r.left+','+r.top+'},{'+r.width+','+r.height+'}}'; } f();";
-    NSString *result = [self.viewWeb stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:js, elementID]];
+    NSString *js = [NSString stringWithFormat:@"getSectionCoordinates('%@')", elementID];
+    NSString *result = [self.viewWeb stringByEvaluatingJavaScriptFromString:js];
     CGRect rect = CGRectFromString(result);
     return rect;
 }
 
 - (NSString *)javascriptSectionTitleOfElementWithId:(NSString *)elementID {
-    NSString *js = @"function f(){ return document.getElementById('%@').innerHTML; } f();";
-    NSString *result = [self.viewWeb stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:js, elementID]];
+    NSString *js = [NSString stringWithFormat:@"getSectionTitle('%@')", elementID];
+    NSString *result = [self.viewWeb stringByEvaluatingJavaScriptFromString:js];
     return result;
 }
 
 - (BOOL)javascriptIsSectionVisible:(int)sectionTag {
-    NSString *js = [NSString stringWithFormat:@"isSectionVisible($('#%@%i'), %1.f, %1.f)", self.sectionTitleTag, (sectionTag + 1), self.viewContent.contentOffset.y, self.viewContent.frame.size.height];
+    NSString *js = [NSString stringWithFormat:@"isSectionVisible('%@%i', %1.f, %1.f)", self.sectionTitleTag, (sectionTag + 1), self.viewContent.contentOffset.y, self.viewContent.frame.size.height];
     NSString *jsResult = [self.viewWeb stringByEvaluatingJavaScriptFromString:js];
     return [jsResult boolValue];
 }
@@ -208,17 +214,20 @@
         
         NSString *sname = [NSString stringWithFormat:@"%@%i", self.sectionTitleTag, sectionID];
         float y = [self javascriptPositionOfElementWithId:sname].origin.y;
+        y -= self.frame.size.height;
         y = (y * self.viewContent.frame.size.height) / self.contentHeight;
         if (i == 0)
             [v setFrame:CGRectMake(5, 4, 10, 10)];
         else
-            [v setFrame:CGRectMake(5, y - 10, 10, 10)];
+            [v setFrame:CGRectMake(5, y, 10, 10)];
         
         [v setTag:i];
-        [v setBackgroundColor:self.colorDefaultSectionDot];
+        [v setBackgroundColor:self.colorSectionDot];
+        [v setAlpha:self.alphaSectionDot];
         [v.layer setCornerRadius:5];
         [v.layer setMasksToBounds:YES];
         [self.viewScroller addSubview:v];
+        [self.viewScroller bringSubviewToFront:v];
         UITapGestureRecognizer *stap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sectionTapped:)];
         [stap setNumberOfTapsRequired:1];
         [stap setNumberOfTouchesRequired:1];
@@ -315,10 +324,12 @@
     
     if (self.scrollingAccessoryView == nil)
         self.scrollingAccessoryView = [[SNAccessoryView alloc] initWithFrame:CGRectZero];
-    [self.scrollingAccessoryView setForegroundColor:self.colorDefaultAccessoryView];
+    [self.scrollingAccessoryView setViewWidth:self.frame.size.width];
+    [self.scrollingAccessoryView setForegroundColor:self.colorAccessoryView];
     [self.scrollingAccessoryView.lblText setFont:self.fontSectionTitle];
     [self.scrollingAccessoryView.lblText setText:title];
-    [self.scrollingAccessoryView.lblText setTextColor:self.colorDefaultAccessoryViewText];
+    [self.scrollingAccessoryView.lblText setTextColor:self.colorAccessoryViewText];
+    [self.scrollingAccessoryView setAlpha:self.alphaAccessoryView];
     
     CGSize maximumLabelSize = CGSizeMake(255, FLT_MAX);
     CGSize expectedTitleSize = [title sizeWithFont:self.scrollingAccessoryView.lblText.font constrainedToSize:maximumLabelSize lineBreakMode:NSLineBreakByWordWrapping];
@@ -335,23 +346,11 @@
 
     ay = y - 15;
     if (ay < 0)
-        ay = 0;
+        ay = 2;
 
     [self.scrollingAccessoryView setFrame:CGRectMake(ax, ay, aw, ah)];
     [self addSubview:self.scrollingAccessoryView];
     [self showAccessory];
-}
-
-#pragma mark - Color operations
-
-- (UIColor *)colorInjectAlpha:(UIColor *)color withAlpha:(float)alpha {
-    CGFloat red = 0.0, green = 0.0, blue = 0.0, alphaOriginal = 0.0;
-    const CGFloat *colorComponents = CGColorGetComponents(color.CGColor);
-    red = colorComponents[0];
-    green = colorComponents[1];
-    blue = colorComponents[2];
-    alphaOriginal = colorComponents[3];
-    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 @end

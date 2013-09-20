@@ -2,8 +2,16 @@
     <head>
         <script>
             function isSectionVisible(elem, sy, sh) {
-                var t = elem.offset().top;
+                //var t = elem.offset().top;
+                var t = document.getElementById(elem).offsetTop;
                 return (t >= sy && t <= (sy + sh));
+            }
+            function getSectionTitle(sectionID) {
+                return document.getElementById(sectionID).innerHTML;
+            }
+            function getSectionCoordinates(sectionID) {
+                var r = document.getElementById(sectionID).getBoundingClientRect();
+                return '{{' + r.left + ',' + r.top + '},{' + r.width + ',' + r.height + '}}';
             }
             </script>
     </head>

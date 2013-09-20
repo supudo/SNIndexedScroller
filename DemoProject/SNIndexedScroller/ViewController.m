@@ -16,10 +16,10 @@
 
     SNScrollView *sv = [[SNScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [sv setupSectionID:@"section"];
-    [sv setColorScroller:[UIColor greenColor] withAlpha:.8f];
-    [sv setColorSectionDot:[UIColor redColor] withAlpha:1];
-    [sv setColorAccessoryView:[UIColor blueColor] withAlpha:1];
-    [sv setFontAccessoryView:[UIFont boldSystemFontOfSize:16] withColor:[UIColor redColor]];
+    [sv setColorScroller:[UIColor blackColor] withAlpha:.2f];
+    [sv setColorSectionDot:[UIColor blackColor] withAlpha:1.0f];
+    [sv setColorAccessoryView:[UIColor darkGrayColor] withAlpha:1.0f];
+    [sv setFontAccessoryView:[UIFont boldSystemFontOfSize:16] withColor:[UIColor whiteColor]];
     [sv showContentWithFile:@"content.txt"];
     [self.view addSubview:sv];
 }
