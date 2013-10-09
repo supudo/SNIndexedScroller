@@ -41,7 +41,8 @@
         y = 10;
     if (y > scrollHeight)
         y = scrollHeight;
-    self.frame = CGRectMake(1, y, self.frame.size.width, self.frame.size.height);
+    // Issue #1 fix
+    ///~self.frame = CGRectMake(1, y, self.frame.size.width, self.frame.size.height);
 
     [UIView commitAnimations];
 
