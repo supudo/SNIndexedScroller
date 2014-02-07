@@ -43,3 +43,5 @@ or
 
 
 Use, change, rewrite, drop me a line ... whatever fits your needs :)
+
+... THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND ...
