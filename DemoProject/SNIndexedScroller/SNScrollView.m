@@ -97,7 +97,7 @@
         //self.alphaScroller = 0.2f;
         self.alphaSectionDot = 1.0f;
         self.alphaAccessoryView = 1.0f;
-
+        
         // Scroll view for the UIWebView content
         self.viewContent = [[UIScrollView alloc] init];
         [self.viewContent setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width - self.scrollbarWidth, frame.size.height)];
@@ -128,7 +128,7 @@
         [self.viewScroller setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
         [self.viewScroller setBackgroundColor:[UIColor clearColor]];
         [self addSubview:self.viewScroller];
-
+        
         // The scrollbar background view
         self.viewScrollerBackground = [[UIView alloc] init];
         [self.viewScrollerBackground setFrame:self.viewScroller.frame];
@@ -136,7 +136,7 @@
         [self.viewScrollerBackground setBackgroundColor:self.colorScroller];
         [self.viewScrollerBackground setAlpha:self.alphaScroller];
         [self addSubview:self.viewScrollerBackground];
-
+        
         self.listSections = [[NSMutableArray alloc] init];
         self.listSectionIDs = [[NSMutableArray alloc] init];
     }
@@ -210,7 +210,7 @@
     [self.scrollingItem setFrame:CGRectMake(1, 1, self.viewScroller.frame.size.width - 2, self.scrollbarWidth - 2)];
     [self.scrollingItem setDelegate:self];
     [self.viewScroller addSubview:self.scrollingItem];
-
+    
     for (int i=0; i<[self.listSectionIDs count]; i++) {
         UIView *v = [[UIView alloc] init];
         
@@ -259,7 +259,7 @@
         float sh = [[arr objectAtIndex:2] floatValue];
         if (y > sy && y < (sy + sh))
             [self showSection:stag withY:y];
-
+        
         BOOL sectionVisible = [self javascriptIsSectionVisible:stag];
         if (sectionVisible) {
             [self showSection:stag withY:y];
@@ -312,7 +312,7 @@
 
 - (void)sectionTapped:(UIGestureRecognizer *)gesture {
     UIView *v = (UIView *)gesture.view;
-    int tid = v.tag;
+    NSInteger tid = v.tag;
     float y = v.center.y;
     if (y < self.scrollingItem.center.y)
         [self draggedUp:nil diff:y];
@@ -322,8 +322,8 @@
     [self showSection:tid withY:y];
 }
 
-- (void)showSection:(int)tid withY:(float)y {
-    NSString *title = [self javascriptSectionTitleOfElementWithId:[NSString stringWithFormat:@"%@%i", self.sectionTitleTag, (tid + 1)]];
+- (void)showSection:(NSInteger)tid withY:(float)y {
+    NSString *title = [self javascriptSectionTitleOfElementWithId:[NSString stringWithFormat:@"%@%zd", self.sectionTitleTag, (tid + 1)]];
     
     if (self.scrollingAccessoryView == nil)
         self.scrollingAccessoryView = [[SNAccessoryView alloc] initWithFrame:CGRectZero];
@@ -346,11 +346,11 @@
     ah += self.scrollingAccessoryView.labelEdgeInsets.bottom;
     
     ax = self.viewScroller.frame.origin.x - aw - 4;
-
+    
     ay = y - 15;
     if (ay < 0)
         ay = 2;
-
+    
     [self.scrollingAccessoryView setFrame:CGRectMake(ax, ay, aw, ah)];
     [self addSubview:self.scrollingAccessoryView];
     [self showAccessory];
